@@ -12,6 +12,7 @@ const enrollmentRoutes = require("./routes/enrollment.route");
 const rewardRoutes = require("./routes/reward.route");
 const bountyRoute = require("./routes/bounty.route");
 const comments = require("./routes/comment.route");
+const analyticsRoutes = require("./routes/analytics.routes");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use("/api", submissionRoutes);
 app.use("/api", enrollmentRoutes);
 app.use("/api", rewardRoutes);
 app.use("/api", bountyRoute);
+app.use("/api/analytics", analyticsRoutes);
 
 // Test route
 app.get("/", (req, res) => {

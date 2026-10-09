@@ -12,6 +12,7 @@ import FAQPage from "./pages/Faqs";
 import WhitepaperPage from "./pages/WhitePaper";
 import ContactUs from "./pages/ContactUs";
 import Docs from "./pages/Docs";
+import Analytics from "./pages/Analytics";
 
 import LoadingScreen from "./components/LoadingScreen";
 import { useTheme } from "./context/ThemeContext";
@@ -69,6 +70,11 @@ function App() {
                 setDark={setDark}
               />
             }
+          />
+
+          <Route
+            path="/analytics"
+            element={<Analytics dark={dark} setDark={setDark} />}
           />
 
           <Route
