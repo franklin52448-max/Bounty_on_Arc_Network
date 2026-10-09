@@ -463,6 +463,66 @@ function NavBar() {
               </Link>
 
               {/* =================================================
+                  ANALYTICS
+              ================================================== */}
+
+              <Link
+                to="/analytics"
+                onClick={() => setIsOpen(false)}
+                className={`
+                  group flex items-center justify-between
+                  px-4 py-3.5
+                  transition-all duration-200
+                  ${
+                    dark
+                      ? "hover:bg-[#D4AF37]/[0.08]"
+                      : "hover:bg-[#D4AF37]/[0.06]"
+                  }
+                `}
+              >
+                <div>
+                  <span
+                    className={`
+                      block text-sm font-bold
+                      transition-colors duration-200
+                      ${
+                        dark
+                          ? "text-white group-hover:text-[#D4AF37]"
+                          : "text-[#222222] group-hover:text-[#B28B20]"
+                      }
+                    `}
+                  >
+                    Analytics
+                  </span>
+
+                  <span
+                    className={`
+                      mt-0.5 block
+                      text-[10px] font-medium
+                      transition-colors
+                      ${
+                        dark
+                          ? "text-white/45 group-hover:text-white/65"
+                          : "text-black/45 group-hover:text-black/65"
+                      }
+                    `}
+                  >
+                    Platform and personal stats
+                  </span>
+                </div>
+
+                <FiArrowRight
+                  className={`
+                    h-4 w-4
+                    transition-all duration-200
+                    group-hover:translate-x-1
+                    group-hover:text-[#D4AF37]
+                    ${dark ? "text-white/25" : "text-black/25"}
+                  `}
+                />
+              </Link>
+
+              {/* =================================================
                   FAQ
               ================================================== */}
 
