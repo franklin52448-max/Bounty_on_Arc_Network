@@ -518,3 +518,54 @@ MIT License — see `LICENSE` file for details.
 ---
 
 **Built with ❤️ for the decentralized security community.**
+
+---
+
+## 📊 Analytics Dashboard
+
+A standalone page at `/analytics` shows platform totals for everyone, plus creator and contributor views for the connected wallet.
+
+### Run
+1. Backend: `cd backend && npm i && npm start`
+2. Frontend: `cd frontend && npm run dev` (no new dependencies; charts are inline SVG)
+3. Open `/analytics`.
+
+### API
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /api/analytics/platform` | Platform totals, top earners, categories, 30-day submissions |
+| `GET /api/analytics/creator/:wallet` | Creator funnel, time to first submission, time to claim, unclaimed rewards |
+| `GET /api/analytics/contributor/:wallet` | Acceptance rate, total earned, earnings trend, wins by category |
+
+Invalid wallets return 400. Creator responses are cached for 60 seconds per wallet.
+
+### Metrics
+| Metric | Computation |
+| --- | --- |
+| USDC distributed | Sum of `reward` on bounties with `distributedAt` set |
+| Active / completed | Bounty status using the same rules as the `currentStatus` virtual |
+| Top earners | Per-wallet sum of payouts on distributed bounties |
+| Categories | Submissions grouped by their bounty's category |
+| Submissions, 30 days | Daily `submittedAt` counts, zero-filled |
+| Funnel | Enrollments, submissions, winners, with % of previous step |
+| Time to first submission | Average of earliest `submittedAt` minus bounty `startDate` |
+| Time to claim | Average of `RewardClaimed` block time minus `distributedAt` (read from the contract) |
+| Unclaimed rewards | Distributed winners where contract `claimed(bountyId, winner)` is false |
+| Acceptance rate | Accepted divided by total submissions for the wallet |
+| Earnings trend | Cumulative payouts by `distributedAt` date |
+
+### Payout rule
+`winners.assigned` stores wallets only, so amounts are derived from `payoutType`: SINGLE pays the full reward; MULTI_EQUAL pays reward divided by winner count; MULTI_PERCENTAGE pays reward times `percentages[i]` divided by 100, matched by winner position.
+
+### Assumptions
+- Submission `user` is lowercase. Creator and winner matches are case-insensitive.
+- "Distributed" means `distributedAt` is set.
+- Submissions are counted from the Submission collection, because the Enrollment and Submission status enums differ.
+
+### Limitations
+- Views are not tracked, so the funnel starts at enrollment.
+- Claim time and unclaimed rewards come from the contract. If the RPC is unreachable, those values show n/a instead of failing the page.
+- Claim timing scans `RewardClaimed` logs from block zero; some RPC providers cap log ranges, in which case timing shows n/a.
+
+### Suggested indexes
+`Bounty { creator: 1 }`, `Bounty { distributedAt: 1 }`, `Submission { submittedAt: 1 }`, `Enrollment { bountyId: 1 }`.
